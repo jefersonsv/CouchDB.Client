@@ -2,7 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
-	<Version>2.0.0-Pre0</Version>
+	<Version>1.0.0.1</Version>
+	<AssemblyVersion>1.0.0.1</AssemblyVersion>
+	<FileVersion>1.0.0.1</FileVersion>
+	<PackageIconUrl>https://raw.githubusercontent.com/jefersonsv/CouchDB.Client/master/logo.png</PackageIconUrl>
+	<PackageProjectUrl>https://github.com/jefersonsv/CouchDB.Client</PackageProjectUrl>
+	<PackageLicenseUrl>https://opensource.org/licenses/mit-license.php</PackageLicenseUrl>
+	<PackageTags>couchdb couch nosq client driver rest</PackageTags>
+	<RepositoryUrl>https://github.com/jefersonsv/CouchDB.Client</RepositoryUrl>
+	<Description>This client access the Apache CouchDB (relax) from platform .NET Core 1.1</Description>
+	<Authors>Jeferson Tenorio</Authors>
+	<PackageReleaseNotes>Initial version</PackageReleaseNotes>
+	<Copyright>CouchDB.Client</Copyright>
+	<RepositoryType>CouchDB.Client</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
