@@ -22,3 +22,69 @@ var client = new CouchDB.Client();
 
 ```
 
+# Features
+
+## Database level
+- CreateDatabaseAsync
+- GetAllDbsAsync
+- GetDatabaseInfoAsync
+- DeleteDatabaseAsync
+
+## Document level
+- BulkInsertAsync
+- DeleteAsync
+  - BatchMode
+- DumpAsync
+- ForceDeleteAsync
+- ForceMergeAsync
+- ForceUpdateAsync 
+- GetAsync
+- GetInfoAsync
+- GetRevision
+- GetRevisionInfoAsync
+- InsertAsync
+  - Generating ID
+  - Specifying ID
+  - BatchMode
+- InsertRevisionAsync
+  - BatchMode
+- SelectAsync
+- UpdateAsync
+
+## Fluent Mango
+
+- FindBuilder
+  - GreatThen
+  - GreatEqualsThan
+  - LessThen
+  - LessEqualsThan
+  - NotEquals
+  - Equals
+  - Not
+  - Nor
+  - Exists
+  - Regex
+  - Type
+- Types
+  - Null
+  - Boolean
+  - Number
+  - String
+  - Array
+  - Object
+
+# Sample usage
+
+
+```c#
+// create database
+var created = await client.CreateDatabaseAsync("test");
+
+// list all databases
+var alldbs = await client.ListAllDbsAsync();
+
+// get created database
+var db = client.GetDatabase("test");
+
+
+```

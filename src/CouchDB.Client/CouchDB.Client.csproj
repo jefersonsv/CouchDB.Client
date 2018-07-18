@@ -1,31 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
-	<Version>2.0.0-Pre0</Version>
-	<AssemblyVersion>1.0.0.1</AssemblyVersion>
-	<FileVersion>1.0.0.1</FileVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	<AssemblyVersion>1.0.0.2</AssemblyVersion>
+	<FileVersion>1.0.0.2</FileVersion>
 	<PackageIconUrl>https://raw.githubusercontent.com/jefersonsv/CouchDB.Client/master/logo.png</PackageIconUrl>
 	<PackageProjectUrl>https://github.com/jefersonsv/CouchDB.Client</PackageProjectUrl>
 	<PackageLicenseUrl>https://opensource.org/licenses/mit-license.php</PackageLicenseUrl>
 	<PackageTags>couchdb couch nosq client driver rest</PackageTags>
 	<RepositoryUrl>https://github.com/jefersonsv/CouchDB.Client</RepositoryUrl>
-	<Description>This client access the Apache CouchDB (relax) from platform .NET Core 1.1</Description>
+	<Description>This client access the Apache CouchDB (relax) for platform .NET Standard 2.0</Description>
 	<Authors>Jeferson Tenorio</Authors>
 	<PackageReleaseNotes>Initial version</PackageReleaseNotes>
 	<Copyright>CouchDB.Client</Copyright>
 	<RepositoryType>CouchDB.Client</RepositoryType>
+	<Version>2.0.0-pre0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Ensure.That" Version="5.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="1.1.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="1.1.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.2" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="RestSharp.NetCore" Version="105.2.3" />
+    <PackageReference Include="Ensure.That" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json.Schema" Version="3.0.10" />
+    <PackageReference Include="RestSharp" Version="106.3.1" />
   </ItemGroup>
 
 </Project>

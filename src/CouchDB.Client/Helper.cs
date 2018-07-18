@@ -1,5 +1,9 @@
 ﻿using EnsureThat;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Schema.Generation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,14 +13,50 @@ namespace CouchDB.Client
 {
     public static class Helper
     {
-        public static string EncodeID(string id)
+        internal static bool IsValidJson(this string stringValue)
         {
-            return System.Net.WebUtility.UrlEncode(id);
+            if (string.IsNullOrWhiteSpace(stringValue))
+            {
+                return false;
+            }
+
+            var value = stringValue.Trim();
+
+            if ((value.StartsWith("{") && value.EndsWith("}")) || //For object
+                (value.StartsWith("[") && value.EndsWith("]"))) //For array
+            {
+                try
+                {
+                    var obj = JToken.Parse(value);
+                    return true;
+                }
+                catch (JsonReaderException)
+                {
+                    return false;
+                }
+            }
+
+            return false;
         }
 
-        public static string DecodeID(string id)
+        internal static T TryParse<T>(string jsonData) where T : new()
         {
-            return System.Net.WebUtility.UrlDecode(id);
+            JSchemaGenerator generator = new JSchemaGenerator();
+            JSchema parsedSchema = generator.Generate(typeof(T));
+            JObject jObject = JObject.Parse(jsonData);
+
+            return jObject.IsValid(parsedSchema) ?
+                JsonConvert.DeserializeObject<T>(jsonData) : default(T);
+        }
+
+        public static string EncodeID(string unencodedID)
+        {
+            return System.Net.WebUtility.UrlEncode(unencodedID);
+        }
+
+        public static string DecodeID(string encodedID)
+        {
+            return System.Net.WebUtility.UrlDecode(encodedID);
         }
 
         public static string GetConnectionString()
@@ -26,7 +66,7 @@ namespace CouchDB.Client
 
         public static string GetConnectionString(string name)
         {
-            EnsureArg.IsNotNull(name);
+            Ensure.That(name).IsNotNullOrWhiteSpace();
 
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -38,7 +78,7 @@ namespace CouchDB.Client
 
             if (string.IsNullOrEmpty(connectionString))
             {
-                throw new Exception("Nothing connectrion string has been setup");
+                throw new InvalidOperationException("Nothing connectrion string has been setup");
             }
 
             return connectionString;

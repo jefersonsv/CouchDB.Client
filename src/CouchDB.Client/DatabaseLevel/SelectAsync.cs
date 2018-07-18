@@ -20,6 +20,17 @@ namespace CouchDB.Client
             return await client.http.ExecuteAsync(request);
         }
 
+        public async Task<CouchResponse> SelectAsync(int take)
+        {
+            var request = new RestSharp.RestRequest("_all_docs", RestSharp.Method.POST);
+
+            FindBuilder expression = new FindBuilder();
+            expression.Limit(take);
+
+            request.AddParameter("application/json", expression.ToString(), RestSharp.ParameterType.RequestBody);
+            return await client.http.ExecuteAsync(request);
+        }
+
         /// <summary>
         /// http://docs.couchdb.org/en/2.0.0/api/database/find.html
         /// </summary>

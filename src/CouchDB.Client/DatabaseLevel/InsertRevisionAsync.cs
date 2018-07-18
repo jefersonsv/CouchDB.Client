@@ -10,21 +10,19 @@ namespace CouchDB.Client
     public partial class CouchDatabase
     {
         /// <summary>
-        /// http://docs.couchdb.org/en/2.0.0/api/database/common.html#post--db
+        /// http://docs.couchdb.org/en/2.1.2/api/document/common.html#put--db-docid
         /// </summary>
         /// <param name="json"></param>
+        /// <param name="batchMode">http://docs.couchdb.org/en/2.1.2/api/database/common.html#batch-mode-writes</param>
         /// <returns></returns>
-        public async Task<CouchResponse> InsertAsync(JToken json)
+        public async Task<CouchResponse> InsertRevisionAsync(JToken json, string id, bool batchMode = false)
         {
-            var request = new RestSharp.RestRequest(RestSharp.Method.POST);
+            var request = new RestSharp.RestRequest(Helper.EncodeID(id), RestSharp.Method.PUT);
+            if (batchMode)
+                request.AddQueryParameter("batch", "ok");
+
             request.AddParameter("application/json", json, ParameterType.RequestBody);
             return await client.http.ExecuteAsync(request);
-        }
-
-        public async Task<CouchResponse> InsertAsync<T>(T obj)
-        {
-            var json = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
-            return await this.InsertAsync(JToken.Parse(json));
         }
     }
 }

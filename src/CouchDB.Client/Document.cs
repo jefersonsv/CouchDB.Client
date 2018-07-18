@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -16,8 +17,10 @@ namespace CouchDB.Client
         /// </summary>
         public JToken Json { get; }
         public JArray Docs { get; }
+        public dynamic Dynamic { get; }
         public string Id { get; }
         public string Rev { get; }
+        public bool Deleted { get; }
         public string Warning { get; }
         public string ErrorMessage { get; set; }
         public IList<Parameter> Headers { get; protected internal set; }
@@ -33,7 +36,10 @@ namespace CouchDB.Client
         public string ContentType { get; set; }
         public IRestRequest Request { get; set; }
         public Exception ErrorException { get; set; }
+
+        [Obsolete("This property is deprecated")]
         public Version ProtocolVersion { get; set; }
+
         //public bool HasAttachments { get; set; }
 
         public Collection<RevisionInfo> Revisions { get; set; }
@@ -42,22 +48,29 @@ namespace CouchDB.Client
         {
             Revisions = new Collection<RevisionInfo>();
 
-            if (response.ResponseStatus != ResponseStatus.Error)
+            var isJson = Helper.IsValidJson(response.Content);
+            if (isJson && response.ResponseStatus != ResponseStatus.Error)
             {
                 this.Json = JToken.Parse(response.Content);
                 this.Json?.SelectToken("id")?.Rename("_id");
                 this.Json?.SelectToken("rev")?.Rename("_rev");
 
+                this.Dynamic = (dynamic) this.Json;
+
                 this.Id = Helper.DecodeID(this.Json.GetString("_id"));
                 this.Rev = this.Json.GetString("_rev");
+                this.Deleted = bool.Parse(this.Json.GetString("_deleted") ?? "false");
                 this.Warning = this.Json.GetString("warning");
-                this.Docs = this.Json.GetArray("docs");
+
+                var docs = this.Json.GetArray("docs");
+                var rows = this.Json.GetArray("rows");
+                this.Docs = docs == null ? rows : docs;
 
                 //this.HasAttachments = this.Json["_attachments"] != null;
 
                 // Get Revision List
                 var revisionInfoArr = this.Json.GetArray("_revs_info");
-                
+
                 if (revisionInfoArr != null)
                 {
                     foreach (var item in revisionInfoArr.Children())
@@ -72,6 +85,8 @@ namespace CouchDB.Client
 
                 this.Content = this.Json.ToString();
             }
+            
+            
 
             this.ContentEncoding = response.ContentEncoding;
             this.ContentLength = response.ContentLength;
@@ -82,7 +97,7 @@ namespace CouchDB.Client
             this.Headers = response.Headers;
             this.ProtocolVersion = response.ProtocolVersion;
             this.RawBytes = response.RawBytes;
-            // this.ResponseStatus = response.ResponseStatus; // Its can consufe the user
+            // this.ResponseStatus = response.ResponseStatus; // Its can confuse the user
             this.StatusCode = response.StatusCode;
             this.StatusDescription = response.StatusDescription;
         }

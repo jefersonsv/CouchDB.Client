@@ -17,7 +17,7 @@ var publishBinaries = output + Directory("publish") + Directory(configuration);
 var packagesBinaries = output + Directory("packages") + Directory(configuration);
 
 // Define variables
-var version = Argument<string>("targetversion", "2.0.0-Pre" + (EnvironmentVariable("BUILD_NUMBER") ?? "0"));
+var version = Argument<string>("targetversion", "2.0.0-pre" + (EnvironmentVariable("APPVEYOR_BUILD_NUMBER") ?? "0"));
 var projectFiles = GetFiles("./src/**/*.csproj");
 
 
@@ -38,7 +38,7 @@ Task("Restore-NuGet-Packages")
     .IsDependentOn("Clean")
     .Does(() =>
 {
-	DotNetCoreRestore("./"); // use it instead of NuGetRestore("./folder");
+	DotNetCoreRestore("./src"); // use it instead of NuGetRestore("./folder");
 });
 
 Task("Build")
@@ -48,29 +48,37 @@ Task("Build")
     if(IsRunningOnWindows())
     {
       // Use MSBuild
-      //MSBuild("./CouchDB.Driver.sln", settings =>
+      //MSBuild("./CouchDB.Client.sln", settings =>
         //settings.SetConfiguration(configuration));
 		
+		/*
 		 var settings = new DotNetCoreBuildSettings
 		 {
-			 Framework = "netcoreapp1.1",
+			 Framework = "netcoreapp2.0",
 			 Configuration = configuration,
 			 OutputDirectory = binariesBinaries
 		 };
-
-		 DotNetCoreBuild("./CouchDB.Driver.sln", settings);
+		 
+		 var settingsStandard = new DotNetCoreBuildSettings
+		 {
+			 Framework = "netstandard2.0",
+			 Configuration = configuration,
+			 OutputDirectory = binariesBinaries
+		 };
+*/
+		 DotNetCoreBuild("./src/CouchDB.Client.sln");
 			  
 		// http://cakebuild.net/api/Cake.Common.Tools.DotNetCore/DotNetCoreAliases/0D79A1B5
-		//DotNetCoreBuild("./src/CouchDB.Driver.Core/CouchDB.Driver.Core.csproj");
+		//DotNetCoreBuild("./src/CouchDB.Client.Core/CouchDB.Client.Core.csproj");
 		
-		//DotNetCoreBuild("./src/CouchDB.Driver.Core.Console/CouchDB.Driver.Core.Console.csproj");
+		//DotNetCoreBuild("./src/CouchDB.Client.Core.Console/CouchDB.Client.Core.Console.csproj");
 
     }
 	/*
     else
     {
       // Use XBuild
-      XBuild("./CouchDB.Driver.sln", settings =>
+      XBuild("./CouchDB.Client.sln", settings =>
         settings.SetConfiguration(configuration));
     }
 	*/
@@ -87,7 +95,7 @@ Task("Package")
          OutputDirectory = packagesBinaries
      };
 	 
-	DotNetCorePack("./src/CouchDB.Driver.Core/CouchDB.Driver.Core.csproj", settings);
+	DotNetCorePack("./src/CouchDB.Client/CouchDB.Client.csproj", settings);
 	 
 });
 
@@ -98,12 +106,12 @@ Task("Publish")
 	 
 	 var settings = new DotNetCorePublishSettings
      {
-         Framework = "netcoreapp1.1",
+         Framework = "netstandard2.0",
          Configuration = configuration,
          OutputDirectory = publishBinaries
      };
 
-     DotNetCorePublish("./CouchDB.Driver.sln", settings);
+     DotNetCorePublish("./src/CouchDB.Client/CouchDB.Client.csproj", settings);
 });
 
 /*

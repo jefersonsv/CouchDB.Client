@@ -2,17 +2,18 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Ensure.That" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="CouchDB.Client">
-      <HintPath>..\..\src\CouchDB.Client\bin\Debug\netcoreapp1.1\CouchDB.Client.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\..\src\CouchDB.Client\CouchDB.Client.csproj" />
   </ItemGroup>
+
 
 </Project>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Text;
+using System.Threading.Tasks;
+using CouchDB.Client.FluentMango;
 using Newtonsoft.Json.Linq;
 
 namespace CouchDB.Client.Console
@@ -8,18 +10,41 @@ namespace CouchDB.Client.Console
     {
         static void Main(string[] args)
         {
+            RunAsync().Wait();
+        }
+
+        public static async Task RunAsync()
+        {
             var cs = CouchDB.Client.Helper.GetConnectionString();
             var client = new CouchClient(cs);
-            var database = client.GetDatabase("esl");
+
+            // create document
+            var doc = new
+            {
+                machine = Environment.MachineName,
+                year = DateTime.Now.Year
+            };
+
+            var db = client.GetDatabase("test");
+            var insert = await db.InsertAsync(doc);
+
+            // get document by id
+            var getdoc = await db.GetAsync(insert.Id);
+
+            // select all
+            var five = await db.SelectAsync(5);
 
             try
             {
-                var fileTemp = System.IO.Path.GetTempFileName();
-                database.DumpAsync(fileTemp);
+                var all = await db.SelectAsync(new FindBuilder().Limit(1));
 
-                System.IO.FileInfo file = new System.IO.FileInfo(fileTemp);
+                //var fileTemp = System.IO.Path.GetTempFileName();
+                //database.DumpAsync(fileTemp);
+                //await database.SelectAsync(null)
 
-                
+                //System.IO.FileInfo file = new System.IO.FileInfo(fileTemp);
+
+
             }
             catch (Exception ex)
             {
@@ -50,8 +75,9 @@ namespace CouchDB.Client.Console
 
             //var j = db.InsertAsync(jo);
 
-            
+
             //var j2 = db.ForceDeleteAsync(j.Result.Id).Result;
+
         }
     }
 }

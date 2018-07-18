@@ -12,14 +12,9 @@ namespace CouchDB.Client
     {
         public async Task<CouchResponse> ForceMergeAsync(JToken json)
         {
-            Ensure.That(json, "json")
-                .WithExtraMessageOf(o => "The json object isn't defined");
+            Ensure.That<JToken>(json, "json", optsFn => optsFn.WithMessage("The json object isn't defined"));
 
-            EnsureArg.IsNotNull(json);
-            var id = Ensure
-                .That<string>(json.GetString("_id"), "_id")
-                .WithExtraMessageOf(o => "The _id field isn't defined")
-                .IsNotNullOrEmpty();
+            var id = Ensure.That<string>(json.GetString("_id"), "_id", optsFn => optsFn.WithMessage("The _id field isn't defined"));
 
             var get = await GetAsync(id.Value);
             var rev = get.Json.GetString("_rev");

@@ -15,8 +15,8 @@ namespace CouchDB.Client
         /// <returns></returns>
         public async Task<CouchResponse> ForceDeleteAsync(string id)
         {
-            var get = await this.GetAsync(id);
-            return await this.DeleteAsync(id, get.Rev);
+            var get = await this.GetAsync(Helper.EncodeID(id));
+            return await this.DeleteAsync(Helper.EncodeID(id), get.Rev);
         }
     }
 }

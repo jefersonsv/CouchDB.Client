@@ -7,6 +7,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CouchDB.Client", "CouchDB.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CouchDB.Client.Console", "..\test\CouchDB.Client.Console\CouchDB.Client.Console.csproj", "{E2E80C98-D77B-40C5-8C6B-B903B9563DF6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6095F473-1AA4-42CD-8AB1-43EFEBB72F12}"
+	ProjectSection(SolutionItems) = preProject
+		..\.gitattributes = ..\.gitattributes
+		..\.gitignore = ..\.gitignore
+		..\build.cake = ..\build.cake
+		..\build.cmd = ..\build.cmd
+		..\build.ps1 = ..\build.ps1
+		..\how-to-build.md = ..\how-to-build.md
+		..\LICENSE = ..\LICENSE
+		..\logo.png = ..\logo.png
+		..\package.cmd = ..\package.cmd
+		..\README.md = ..\README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +38,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F6E31BA0-D782-45C0-B8C5-C954C7D436F7}
 	EndGlobalSection
 EndGlobal

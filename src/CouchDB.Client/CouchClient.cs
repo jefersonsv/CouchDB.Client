@@ -12,11 +12,12 @@ namespace CouchDB.Client
         
         public CouchClient(string connectionString)
         {
-            EnsureArg.IsNotNullOrWhiteSpace(connectionString, nameof(connectionString));
+            Ensure.That(connectionString).IsNotNullOrWhiteSpace();
 
-            connectionString = connectionString.EndsWith("/") ? connectionString : connectionString + "/";
-
+            connectionString = connectionString.EndsWith("/", StringComparison.InvariantCultureIgnoreCase) ? connectionString : connectionString + "/";
+            connectionString = connectionString.StartsWith("http", StringComparison.InvariantCultureIgnoreCase) ? connectionString : "http://" + connectionString;
             Uri uri = new Uri(connectionString);
+
             if (!string.IsNullOrEmpty(uri.UserInfo))
             {
                 this.connectionString = connectionString.Replace(uri.UserInfo + "@", string.Empty);
