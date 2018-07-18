@@ -2,19 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-	<AssemblyVersion>1.0.0.2</AssemblyVersion>
+	<AssemblyVersion>1.0.0.3</AssemblyVersion>
 	<FileVersion>1.0.0.2</FileVersion>
 	<PackageIconUrl>https://raw.githubusercontent.com/jefersonsv/CouchDB.Client/master/logo.png</PackageIconUrl>
 	<PackageProjectUrl>https://github.com/jefersonsv/CouchDB.Client</PackageProjectUrl>
 	<PackageLicenseUrl>https://opensource.org/licenses/mit-license.php</PackageLicenseUrl>
-	<PackageTags>couchdb couch nosq client driver rest</PackageTags>
+	<PackageTags>couchdb couch nosql client driver rest</PackageTags>
 	<RepositoryUrl>https://github.com/jefersonsv/CouchDB.Client</RepositoryUrl>
 	<Description>This client access the Apache CouchDB (relax) for platform .NET Standard 2.0</Description>
 	<Authors>Jeferson Tenorio</Authors>
-	<PackageReleaseNotes>Initial version</PackageReleaseNotes>
+	<PackageReleaseNotes>A lot features implemented</PackageReleaseNotes>
 	<Copyright>CouchDB.Client</Copyright>
 	<RepositoryType>CouchDB.Client</RepositoryType>
-	<Version>2.0.0-pre0</Version>
+	<Version>1.0.4</Version>
+	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
