@@ -1,3 +1,8 @@
+#tool "nuget:?package=JetBrains.dotCover.CommandLineTools"
+#tool "nuget:?package=OpenCover"
+#tool "nuget:?package=xunit.runner.console"
+#tool "nuget:?package=ReportGenerator"
+
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,7 +79,9 @@ Task("Compile")
     .Does(() =>
     {
         var projects =
-            GetFiles("./**/*.csproj");
+            GetFiles("./src/**/*.csproj")
+            + GetFiles("./test/**/*.csproj")
+            + GetFiles("./sample/**/*.csproj");
 
         foreach(var project in projects)
         {
@@ -103,9 +110,62 @@ Task("Compile")
         }
     });
 
+Task("Test")
+    .Description("Executes unit tests for all projects")
+    .IsDependentOn("Compile")
+    .Does(() =>
+    {
+        var projects =
+            GetFiles("./test/**/*.csproj");
+
+        if (projects.Count == 0)
+        {
+            throw new CakeException("Unable to find any projects to test.");
+        }
+
+        foreach(var project in projects)
+        {
+            var content =
+                System.IO.File.ReadAllText(project.FullPath, Encoding.UTF8);
+
+            if (IsRunningOnUnix() && content.Contains(">" + fullFrameworkTarget + "<"))
+            {
+                Information(project.GetFilename() + " only supports " +fullFrameworkTarget + " and tests cannot be executed on *nix. Skipping.");
+                continue;
+            }
+
+            var settings = new ProcessSettings {
+                Arguments = string.Concat("xunit -configuration ", configuration, " -nobuild"),
+                WorkingDirectory = project.GetDirectory()
+            };
+
+            if (IsRunningOnUnix())
+            {
+                settings.Arguments.Append(string.Concat("-framework ", netCoreTarget));
+            }
+
+            Information("Executing tests for " + project.GetFilename() + " with arguments: " + settings.Arguments.Render());
+
+            if (StartProcess("dotnet", settings) != 0)
+            {
+                throw new CakeException("One or more tests failed during execution of: " + project.GetFilename());
+            }
+        }
+    });
+
+Task("Cover")
+    .Description("Coverage Test")
+    .IsDependentOn("Test")
+    .Does(() =>
+    {
+        
+    });
+
+
+
 Task("Publish")
     .Description("Gathers output files and copies them to the output folder")
-    .IsDependentOn("Compile")
+    .IsDependentOn("Cover")
     .Does(() =>
     {
         // Copy netcore binaries.
@@ -123,7 +183,7 @@ Task("Publish")
         Information("Binaries published: ./" + outputBinaries);
     });
 
-Task("Package-Zip")
+Task("Package")
     .Description("Zips up the built binaries for easy distribution")
     .IsDependentOn("Publish")
     .Does(() =>
@@ -137,7 +197,7 @@ Task("Package-Zip")
     });
 
 Task("Update-Version")
-    .IsDependentOn("Package-Zip")
+    .IsDependentOn("Package")
     .Does(() =>
     {
         var projects =
@@ -231,7 +291,7 @@ Task("Prepare-Release")
     .Does(() =>
     {
         // Add
-        foreach (var file in GetFiles("./**/*.csproj"))
+        foreach (var file in GetFiles("./src/**/*.csproj"))
         {
             if (nogit)
             {

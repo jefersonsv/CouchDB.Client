@@ -13,7 +13,7 @@ namespace CouchDB.Client
 {
     public static class Helper
     {
-        internal static bool IsValidJson(this string stringValue)
+        public static bool IsValidJson(this string stringValue)
         {
             if (string.IsNullOrWhiteSpace(stringValue))
             {
