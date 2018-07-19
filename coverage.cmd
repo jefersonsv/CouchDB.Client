@@ -1,7 +1,7 @@
 REM https://github.com/lucaslorentz/minicover
 REM https://github.com/lucaslorentz/minicover/blob/master/sample/build.sh
 
-cd tools
+cd test
 cd minicover
 dotnet restore
 dotnet build

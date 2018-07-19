@@ -1,6 +1,6 @@
 {
-  "SourcePath": "C:\\DEV\\Github\\CouchDB.Client\\tools\\minicover\\",
-  "HitsFile": "C:\\DEV\\Github\\CouchDB.Client\\tools\\minicover\\coverage-hits.txt",
+  "SourcePath": "C:\\DEV\\Github\\CouchDB.Client\\test\\minicover\\",
+  "HitsFile": "C:\\DEV\\Github\\CouchDB.Client\\test\\minicover\\coverage-hits.txt",
   "ExtraAssemblies": [
     "C:\\DEV\\Github\\CouchDB.Client\\test\\CouchDB.Client.Test\\bin\\Debug\\netcoreapp2.0\\MiniCover.HitServices.dll",
     "C:\\DEV\\Github\\CouchDB.Client\\test\\CouchDB.Client.Test\\bin\\Debug\\netcoreapp2.1\\MiniCover.HitServices.dll",
