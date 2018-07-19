@@ -117,9 +117,6 @@ namespace CouchDB.Client.FluentMango
 
         private void WriteSelectores()
         {
-            if (selectorCollection.Count == 0)
-                return;
-
             this.StartSelector();
 
             foreach (var item in selectorCollection)

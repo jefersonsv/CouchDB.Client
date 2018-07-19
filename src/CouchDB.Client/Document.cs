@@ -17,6 +17,8 @@ namespace CouchDB.Client
         /// </summary>
         public JToken Json { get; }
         public JArray Docs { get; }
+        public long? TotalRows { get; }
+        public long? TotalDocs { get; }
         public dynamic Dynamic { get; }
         public string Id { get; }
         public string Rev { get; }
@@ -59,12 +61,14 @@ namespace CouchDB.Client
 
                 this.Id = Helper.DecodeID(this.Json.GetString("_id"));
                 this.Rev = this.Json.GetString("_rev");
-                this.Deleted = bool.Parse(this.Json.GetString("_deleted") ?? "false");
+                this.Deleted = this.Json.GetBooleanNullable("_deleted") ?? false;
                 this.Warning = this.Json.GetString("warning");
 
                 var docs = this.Json.GetArray("docs");
                 var rows = this.Json.GetArray("rows");
                 this.Docs = docs == null ? rows : docs;
+                this.TotalDocs = docs?.Count;
+                this.TotalRows = this.Json.GetLongNullable("total_rows");
 
                 //this.HasAttachments = this.Json["_attachments"] != null;
 

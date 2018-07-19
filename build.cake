@@ -1,170 +1,296 @@
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
-//////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
-//////////////////////////////////////////////////////////////////////
-
+///////////////////////////////////////////////////////////////////////////////
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
+var nogit = false;
 
-//////////////////////////////////////////////////////////////////////
-// PREPARATION
-//////////////////////////////////////////////////////////////////////
+var fullFrameworkTarget = "net452";
+var netStandardTarget = "netstandard2.0";
+var netCoreTarget = "netcoreapp2.0";
+var nugetSource = "https://api.nuget.org/v3/index.json";
+var version = string.Empty;
 
 // Directories
-var output = Directory("./build");
-var binariesBinaries = output + Directory("binaries") + Directory(configuration);
-var publishBinaries = output + Directory("publish") + Directory(configuration);
-var packagesBinaries = output + Directory("packages") + Directory(configuration);
+var output = Directory("build");
+var outputBinaries = output + Directory("binaries");
+var outputBinariesCore = outputBinaries + Directory(netCoreTarget);
+var outputBinariesNetstandard = outputBinaries + Directory(netStandardTarget);
+var outputPackages = output + Directory("packages");
+var outputNuGet = output + Directory("nuget");
 
-// Define variables
-var version = Argument<string>("targetversion", "2.0.0-pre" + (EnvironmentVariable("APPVEYOR_BUILD_NUMBER") ?? "0"));
-var projectFiles = GetFiles("./src/**/*.csproj");
+// Files
+var zipFile = outputPackages + File("CouchDB-Client-Latest.zip");
 
+///////////////////////////////////////////////////////////////////////////////
+// SETUP / TEARDOWN
+///////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////////
+Setup(ctx =>
+{
+   // Executed BEFORE the first task.
+   Information("Cleaning Folders");
+
+   CleanDirectories(new DirectoryPath[] {
+            output,
+            outputBinaries,
+            outputPackages,
+            outputNuGet,
+            outputBinariesCore,
+            outputBinariesNetstandard
+        });
+
+    CleanDirectories("./src/**/" + configuration);
+    CleanDirectories("./test/**/" + configuration);
+    CleanDirectories("./samples/**/" + configuration);
+});
+
+// Teardown(ctx =>
+// {
+//    // Executed AFTER the last task.
+//    Information("Finished running tasks.");
+// });
+
+///////////////////////////////////////////////////////////////////////////////
 // TASKS
-//////////////////////////////////////////////////////////////////////
-
-Task("Clean")
-    .Does(() =>
-{
-	CleanDirectories(new DirectoryPath[] {
-		binariesBinaries,
-		publishBinaries
-	});
-});
-
+///////////////////////////////////////////////////////////////////////////////
 Task("Restore-NuGet-Packages")
-    .IsDependentOn("Clean")
+    .Description("Restores NuGet packages for all projects")
     .Does(() =>
-{
-	DotNetCoreRestore("./src"); // use it instead of NuGetRestore("./folder");
-});
+    {
+        DotNetCoreRestore(new DotNetCoreRestoreSettings {
+            ArgumentCustomization = args => {
+                args.Append("--verbosity minimal");
+                return args;
+            }
+        });
 
-Task("Build")
+        Information("NuGet packages restored");
+    });
+    
+Task("Compile")
+    .Description("Builds all the projects in the solution")
     .IsDependentOn("Restore-NuGet-Packages")
     .Does(() =>
-{
-    if(IsRunningOnWindows())
     {
-      // Use MSBuild
-      //MSBuild("./CouchDB.Client.sln", settings =>
-        //settings.SetConfiguration(configuration));
-		
-		/*
-		 var settings = new DotNetCoreBuildSettings
-		 {
-			 Framework = "netcoreapp2.0",
-			 Configuration = configuration,
-			 OutputDirectory = binariesBinaries
-		 };
-		 
-		 var settingsStandard = new DotNetCoreBuildSettings
-		 {
-			 Framework = "netstandard2.0",
-			 Configuration = configuration,
-			 OutputDirectory = binariesBinaries
-		 };
-*/
-		 DotNetCoreBuild("./src/CouchDB.Client.sln");
-			  
-		// http://cakebuild.net/api/Cake.Common.Tools.DotNetCore/DotNetCoreAliases/0D79A1B5
-		//DotNetCoreBuild("./src/CouchDB.Client.Core/CouchDB.Client.Core.csproj");
-		
-		//DotNetCoreBuild("./src/CouchDB.Client.Core.Console/CouchDB.Client.Core.Console.csproj");
+        var projects =
+            GetFiles("./**/*.csproj");
 
-    }
-	/*
-    else
-    {
-      // Use XBuild
-      XBuild("./CouchDB.Client.sln", settings =>
-        settings.SetConfiguration(configuration));
-    }
-	*/
-});
+        foreach(var project in projects)
+        {
+            var content =
+                System.IO.File.ReadAllText(project.FullPath, Encoding.UTF8);
 
-Task("Package")
-	.IsDependentOn("Build")
-	.Does(() =>
-{
-	 
-	 var settings = new DotNetCorePackSettings
-     {
-         Configuration = configuration,
-         OutputDirectory = packagesBinaries
-     };
-	 
-	DotNetCorePack("./src/CouchDB.Client/CouchDB.Client.csproj", settings);
-	 
-});
+            if (IsRunningOnUnix() && content.Contains(">" + fullFrameworkTarget + "<"))
+            {
+                Information(project.GetFilename() + " only supports " +fullFrameworkTarget + " and cannot be built on *nix. Skipping.");
+                continue;
+            }
+
+            DotNetCoreBuild(project.GetDirectory().FullPath, new DotNetCoreBuildSettings {
+                ArgumentCustomization = args => {
+                    if (IsRunningOnUnix())
+                    {
+                        args.Append(string.Concat("-f ", project.GetDirectory().GetDirectoryName().Contains(".Tests") ? netCoreTarget : netStandardTarget));
+                    }
+
+                    return args;
+                },
+                Configuration = configuration
+            });
+
+            Information("Project Compiled: " + project);
+        }
+    });
 
 Task("Publish")
-	.IsDependentOn("Package")
-	.Does(() =>
-{
-	 
-	 var settings = new DotNetCorePublishSettings
-     {
-         Framework = "netstandard2.0",
-         Configuration = configuration,
-         OutputDirectory = publishBinaries
-     };
-
-     DotNetCorePublish("./src/CouchDB.Client/CouchDB.Client.csproj", settings);
-});
-
-/*
-Task("Run-Unit-Tests")
-    .IsDependentOn("Build")
+    .Description("Gathers output files and copies them to the output folder")
+    .IsDependentOn("Compile")
     .Does(() =>
-{
-    NUnit3("./src/** /bin/" + configuration + "/*.Tests.dll", new NUnit3Settings {
-        NoResults = true
-        });
-});
-*/
+    {
+        // Copy netcore binaries.
+        CopyFiles(GetFiles("./src/**/bin/" + configuration + "/" + netCoreTarget + "/*.dll")
+            + GetFiles("./src/**/bin/" + configuration + "/" + netCoreTarget + "/*.xml")
+            + GetFiles("./src/**/bin/" + configuration + "/" + netCoreTarget + "/*.pdb")
+            , outputBinariesCore);
+
+        // Copy netstandard binaries.
+        CopyFiles(GetFiles("./src/**/bin/" + configuration + "/" + netStandardTarget + "/*.dll")
+            + GetFiles("./src/**/bin/" + configuration + "/" + netStandardTarget + "/*.xml")
+            + GetFiles("./src/**/bin/" + configuration + "/" + netStandardTarget + "/*.pdb")
+            , outputBinariesNetstandard);
+
+        Information("Binaries published: ./" + outputBinaries);
+    });
+
+Task("Package-Zip")
+    .Description("Zips up the built binaries for easy distribution")
+    .IsDependentOn("Publish")
+    .Does(() =>
+    {
+        var files =
+            GetFiles(outputBinaries.Path.FullPath + "/**/*");
+
+        Zip(outputBinaries, zipFile, files);
+
+        Information("Zip file generated: ./" + zipFile);
+    });
 
 Task("Update-Version")
+    .IsDependentOn("Package-Zip")
     .Does(() =>
     {
-        Information("Setting version to " + version);
+        var projects =
+            GetFiles("./**/*.csproj");
 
-        if(string.IsNullOrWhiteSpace(version)) {
-            throw new CakeException("No version specified! You need to pass in --targetversion=\"x.y.z\"");
+        foreach(var projectInfo in projects)
+        {
+            var project =
+                System.IO.File.ReadAllText(projectInfo.ToString(), Encoding.UTF8);
+
+            var projectVersion =
+                new System.Text.RegularExpressions.Regex(@"<Version>(?<ver>.+)<\/Version>");
+
+            var match = projectVersion.Match(project);
+            if (match.Success)
+            {
+                var currentVersion = match.Groups["ver"].Value;
+                var nextVersion = string.Empty;
+                var ver = System.Version.Parse(currentVersion);
+
+                // Increase version
+                if (ver.MinorRevision > -1)
+                    nextVersion = string.Format("{0}.{1}.{2}.{3}", ver.Major, ver.Minor, ver.Build, ver.MinorRevision + 1);
+                else if (ver.Build > -1)
+                    nextVersion = string.Format("{0}.{1}.{2}", ver.Major, ver.Minor, ver.Build + 1);
+                else if (ver.Minor > -1)
+                    nextVersion = string.Format("{0}.{1}", ver.Major, ver.Minor + 1);
+                //else
+                //throw new InvalidOperationException("The version number is not valid");
+
+                if (!string.IsNullOrWhiteSpace(nextVersion))
+                {
+                    project =
+                        projectVersion.Replace(project, string.Concat("<Version>", nextVersion, "</Version>"));
+
+                    System.IO.File.WriteAllText(projectInfo.ToString(), project, Encoding.UTF8);
+                }
+            }
+        }
+    });
+
+Task("Package-NuGet")
+    .Description("Generates NuGet packages for each project")
+    .IsDependentOn("Update-Version")
+    .Does(() =>
+    {
+        foreach(var project in GetFiles("./src/**/*.csproj"))
+        {
+            Information("Packaging " + project.GetFilename().FullPath);
+
+            var content =
+                System.IO.File.ReadAllText(project.FullPath, Encoding.UTF8);
+
+            if (IsRunningOnUnix() && content.Contains(">" + fullFrameworkTarget + "<"))
+            {
+                Information(project.GetFilename() + " only supports " +fullFrameworkTarget + " and cannot be packaged on *nix. Skipping.");
+                continue;
+            }
+
+            DotNetCorePack(project.GetDirectory().FullPath, new DotNetCorePackSettings {
+                Configuration = configuration,
+                OutputDirectory = outputNuGet
+            });
+
+            Information("Package generated: " + project.GetDirectory().FullPath);
+        }
+    });
+
+Task("Publish-NuGet")
+    .Description("Pushes the nuget packages in the nuget folder to a NuGet source. Also publishes the packages into the feeds.")
+    .IsDependentOn("Package-NuGet")
+    .Does(() =>
+    {
+        var packages =
+            GetFiles(outputNuGet.Path.FullPath + "/*.nupkg") -
+            GetFiles(outputNuGet.Path.FullPath + "/*.symbols.nupkg");
+
+        foreach(var package in packages)
+        {
+            NuGetPush(package, new NuGetPushSettings {
+                Source = nugetSource
+                // ApiKey = apiKey
+            });
+
+            Information("Nuget pushed: " + package);
+        }
+    });
+
+Task("Prepare-Release")
+    .IsDependentOn("Publish-NuGet")
+    .Does(() =>
+    {
+        // Add
+        foreach (var file in GetFiles("./**/*.csproj"))
+        {
+            if (nogit)
+            {
+                Information("git " + string.Format("add {0}", file.FullPath));
+            }
+            else
+            {
+                StartProcess("git", new ProcessSettings {
+                    Arguments = string.Format("add {0}", file.FullPath)
+                });
+            }
         }
 
-        UpdateProjectJsonVersion(version, projectFiles);
+        // Commit
+        if (nogit)
+        {
+            Information("git " + string.Format("commit -m \"Updated version to {0}\"", version));
+        }
+        else
+        {
+            StartProcess("git", new ProcessSettings {
+                Arguments = string.Format("commit -m \"Updated version to {0}\"", version)
+            });
+        }
+
+        // Tag
+        if (nogit)
+        {
+            Information("git " + string.Format("tag \"v{0}\"", version));
+        }
+        else
+        {
+            StartProcess("git", new ProcessSettings {
+                Arguments = string.Format("tag \"v{0}\"", version)
+            });
+        }
+
+        //Push
+        if (nogit)
+        {
+            Information("git push origin master");
+            Information("git push --tags");
+        }
+        else
+        {
+            StartProcess("git", new ProcessSettings {
+                Arguments = "push origin master"
+            });
+
+            StartProcess("git", new ProcessSettings {
+                Arguments = "push --tags"
+            });
+        }
     });
-	
-//////////////////////////////////////////////////////////////////////
-// TASK TARGETS
-//////////////////////////////////////////////////////////////////////
 
 Task("Default")
-	.IsDependentOn("Update-Version")
-	.IsDependentOn("Publish");
-    //.IsDependentOn("Run-Unit-Tests");
-
-//////////////////////////////////////////////////////////////////////
-// EXECUTION
-//////////////////////////////////////////////////////////////////////
+    .IsDependentOn("Compile")
+    .Does(() => {
+        Information("Compilation Executed!");
+    });
 
 RunTarget(target);
-
-public static void UpdateProjectJsonVersion(string version, FilePathCollection filePaths)
-{
-    foreach (var file in filePaths)
-    {
-        var project =
-            System.IO.File.ReadAllText(file.FullPath, Encoding.UTF8);
-
-		// https://msdn.microsoft.com/pt-br/library/ewy2t5e0(v=vs.110).aspx
-        var projectVersion =
-            new System.Text.RegularExpressions.Regex("(?<open><Version>).+(?<close><\\/Version>)");
-
-		project = projectVersion.Replace(project, "${open}" + version + "${close}");
-
-        System.IO.File.WriteAllText(file.FullPath, project, Encoding.UTF8);
-    }
-}

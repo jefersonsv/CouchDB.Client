@@ -2,6 +2,7 @@
 using RestSharp;
 using RestSharp.Authenticators;
 using System;
+using System.Threading.Tasks;
 
 namespace CouchDB.Client
 {
@@ -40,9 +41,13 @@ namespace CouchDB.Client
             http.client.AddDefaultHeader("Content-Type", "application/json");
         }
 
-        public CouchDatabase GetDatabase(string database)
+        public async Task<CouchDatabase> GetDatabaseAsync(string database)
         {
-            return new CouchDatabase(this, database);
+            var db = await this.GetDatabaseInfoAsync(database);
+            if (db.StatusCode == System.Net.HttpStatusCode.OK)
+                return new CouchDatabase(this, database);
+            else
+                return null;
         }
     }
 }

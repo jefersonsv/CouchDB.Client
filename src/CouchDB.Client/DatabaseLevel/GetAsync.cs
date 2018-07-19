@@ -8,15 +8,12 @@ namespace CouchDB.Client
 {
     public partial class CouchDatabase
     {
-        public async Task<CouchResponse> GetAsync(string id)
+        public async Task<CouchResponse> GetAsync(string id, bool showRevisions = false)
         {
             var request = new RestSharp.RestRequest(Helper.EncodeID(id), RestSharp.Method.GET);
-            return await client.http.ExecuteAsync(request);
-        }
+            if (showRevisions)
+                request.AddQueryParameter("revs_info", "true");
 
-        public async Task<CouchResponse> GetAsync(JToken json)
-        {
-            var request = new RestSharp.RestRequest(Helper.EncodeID(json.GetString("_id")), RestSharp.Method.GET);
             return await client.http.ExecuteAsync(request);
         }
     }

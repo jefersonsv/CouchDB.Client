@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CouchDB.Client", "src\CouchDB.Client\CouchDB.Client.csproj", "{996199DD-6A84-42AD-A799-59FD6616B704}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6095F473-1AA4-42CD-8AB1-43EFEBB72F12}"
+	ProjectSection(SolutionItems) = preProject
+		.\.gitattributes = .\.gitattributes
+		.\.gitignore = .\.gitignore
+		.\build.cake = .\build.cake
+		.\build.cmd = .\build.cmd
+		.\build.ps1 = .\build.ps1
+		.\how-to-build.md = .\how-to-build.md
+		.\LICENSE = .\LICENSE
+		.\logo.png = .\logo.png
+		.\package.cmd = .\package.cmd
+		.\README.md = .\README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CouchDB.Client.Console", "sample\CouchDB.Client.Console\CouchDB.Client.Console.csproj", "{57845336-2931-42F1-BCF1-E50CAAA8A47D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CouchDB.Client.Test", "test\CouchDB.Client.Test\CouchDB.Client.Test.csproj", "{C044D427-C4F8-4293-B539-C8F00B1194D8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{996199DD-6A84-42AD-A799-59FD6616B704}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{996199DD-6A84-42AD-A799-59FD6616B704}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{996199DD-6A84-42AD-A799-59FD6616B704}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{996199DD-6A84-42AD-A799-59FD6616B704}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57845336-2931-42F1-BCF1-E50CAAA8A47D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57845336-2931-42F1-BCF1-E50CAAA8A47D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57845336-2931-42F1-BCF1-E50CAAA8A47D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57845336-2931-42F1-BCF1-E50CAAA8A47D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C044D427-C4F8-4293-B539-C8F00B1194D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C044D427-C4F8-4293-B539-C8F00B1194D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C044D427-C4F8-4293-B539-C8F00B1194D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C044D427-C4F8-4293-B539-C8F00B1194D8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F6E31BA0-D782-45C0-B8C5-C954C7D436F7}
+	EndGlobalSection
+EndGlobal

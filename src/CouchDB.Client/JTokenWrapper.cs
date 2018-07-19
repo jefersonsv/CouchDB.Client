@@ -12,6 +12,24 @@ namespace Newtonsoft.Json.Linq
             return token.SelectToken(path)?.Value<string>();
         }
 
+        public static long? GetLongNullable(this JToken token, string path)
+        {
+            var val = GetString(token, path);
+            if (!string.IsNullOrEmpty(val))
+                return long.Parse(val);
+
+            return null;
+        }
+
+        public static Boolean? GetBooleanNullable(this JToken token, string path)
+        {
+            var val = GetString(token, path);
+            if (!string.IsNullOrEmpty(val))
+                return Boolean.Parse(val);
+
+            return null;
+        }
+
         public static JArray GetArray(this JToken token, string path)
         {
             return (JArray) token.SelectToken(path);
