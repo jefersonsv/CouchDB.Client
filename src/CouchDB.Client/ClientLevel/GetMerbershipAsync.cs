@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace CouchDB.Client
 {
     public partial class CouchClient
     {
-        public async Task<CouchResponse> GetMerbershipAsync()
+        public async Task<CouchResponse> GetMembershipAsync()
         {
             var request = new RestSharp.RestRequest("_membership");
             return await http.ExecuteAsync(request);

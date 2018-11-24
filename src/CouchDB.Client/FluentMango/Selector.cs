@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CouchDB.Client.FluentMango
+﻿namespace CouchDB.Client.FluentMango
 {
     public class Selector
     {
