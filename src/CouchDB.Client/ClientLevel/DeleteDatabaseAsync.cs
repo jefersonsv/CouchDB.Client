@@ -5,7 +5,7 @@ namespace CouchDB.Client
     public partial class CouchClient
     {
         /// <summary>
-        /// http://docs.couchdb.org/en/2.1.2/api/database/common.html#delete--db
+        /// http://docs.couchdb.org/en/2.2.0/api/database/common.html#delete--db
         /// </summary>
         /// <returns></returns>
         public async Task<CouchResponse> DeleteDatabaseAsync(string databaseName)

@@ -5,7 +5,7 @@ namespace CouchDB.Client
     public partial class CouchDatabase
     {
         /// <summary>
-        /// http://docs.couchdb.org/en/2.0.0/api/document/common.html#obtaining-an-extended-revision-history
+        /// http://docs.couchdb.org/en/2.2.0/api/document/common.html#obtaining-an-extended-revision-history
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

@@ -5,7 +5,7 @@ namespace CouchDB.Client
     public partial class CouchClient
     {
         /// <summary>
-        /// http://docs.couchdb.org/en/2.1.2/api/database/common.html#get--db
+        /// http://docs.couchdb.org/en/2.2.0/api/database/common.html#get--db
         /// </summary>
         /// <returns></returns>
         public async Task<CouchResponse> GetDatabaseInfoAsync(string databaseName)

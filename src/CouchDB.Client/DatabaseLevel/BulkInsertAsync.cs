@@ -7,7 +7,7 @@ namespace CouchDB.Client
     public partial class CouchDatabase
     {
         /// <summary>
-        /// http://docs.couchdb.org/en/2.0.0/api/database/bulk-api.html#api-db-all-docs
+        /// http://docs.couchdb.org/en/2.2.0/api/database/bulk-api.html#api-db-all-docs
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>

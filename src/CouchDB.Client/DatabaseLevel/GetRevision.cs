@@ -5,7 +5,7 @@ namespace CouchDB.Client
     public partial class CouchDatabase
     {
         /// <summary>
-        /// http://docs.couchdb.org/en/2.1.2/api/document/common.html#obtaining-a-specific-revision
+        /// http://docs.couchdb.org/en/2.2.0/api/document/common.html#obtaining-a-specific-revision
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

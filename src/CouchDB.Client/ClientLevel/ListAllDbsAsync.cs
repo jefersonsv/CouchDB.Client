@@ -5,7 +5,7 @@ namespace CouchDB.Client
     public partial class CouchClient
     {
         /// <summary>
-        /// http://docs.couchdb.org/en/2.0.0/api/server/common.html#all-dbs
+        /// http://docs.couchdb.org/en/2.2.0/api/server/common.html#all-dbs
         /// </summary>
         /// <returns></returns>
         public async Task<CouchResponse> ListAllDbsAsync()

@@ -8,7 +8,7 @@ using System.Text;
 namespace CouchDB.Client.FluentMango
 {
     /// <summary>
-    /// http://docs.couchdb.org/en/2.0.0/api/database/find.html
+    /// http://docs.couchdb.org/en/2.2.0/api/database/find.html
     /// </summary>
     public class FindBuilder
     {
