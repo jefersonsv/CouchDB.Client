@@ -1,11 +1,6 @@
 ﻿using CouchDB.Client;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 public class RestClientWrapper

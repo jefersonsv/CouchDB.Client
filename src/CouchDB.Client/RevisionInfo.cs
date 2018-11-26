@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CouchDB.Client
+﻿namespace CouchDB.Client
 {
     public class RevisionInfo
     {

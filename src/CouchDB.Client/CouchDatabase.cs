@@ -1,12 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace CouchDB.Client
 {
     /// <summary>
-    /// http://docs.couchdb.org/en/2.1.0/   
+    /// http://docs.couchdb.org/en/2.2.0/   
     /// </summary>
     public partial class CouchDatabase
     {

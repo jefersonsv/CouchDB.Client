@@ -5,9 +5,7 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace CouchDB.Client
 {

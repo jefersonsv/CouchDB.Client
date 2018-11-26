@@ -1,17 +1,14 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CouchDB.Client.FluentMango
 {
     /// <summary>
-    /// http://docs.couchdb.org/en/2.0.0/api/database/find.html
+    /// http://docs.couchdb.org/en/2.2.0/api/database/find.html
     /// </summary>
     public class FindBuilder
     {

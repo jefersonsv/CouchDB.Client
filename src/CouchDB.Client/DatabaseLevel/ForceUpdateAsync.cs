@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CouchDB.Client
@@ -10,7 +7,7 @@ namespace CouchDB.Client
     public partial class CouchDatabase
     {
         /// <summary>
-        /// http://docs.couchdb.org/en/2.0.0/api/database/common.html#post--db
+        /// http://docs.couchdb.org/en/2.2.0/api/database/common.html#post--db
         /// </summary>
         /// <param name="json"></param>
         /// <returns></returns>

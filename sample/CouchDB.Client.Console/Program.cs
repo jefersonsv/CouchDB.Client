@@ -1,8 +1,4 @@
-﻿using System;
-using System.Text;
-using System.Threading.Tasks;
-using CouchDB.Client.FluentMango;
-using Newtonsoft.Json.Linq;
+﻿using System.Threading.Tasks;
 
 namespace CouchDB.Client.Console
 {

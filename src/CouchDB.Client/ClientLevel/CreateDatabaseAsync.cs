@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace CouchDB.Client
 {
     public partial class CouchClient
     {
         /// <summary>
-        /// http://docs.couchdb.org/en/2.1.2/api/database/common.html#put--db
+        /// http://docs.couchdb.org/en/2.2.0/api/database/common.html#put--db
         /// The default is 3 replicas and 8 shards
         /// </summary>
         /// <returns></returns>
