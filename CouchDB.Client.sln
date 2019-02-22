@@ -7,16 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CouchDB.Client", "src\Couch
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6095F473-1AA4-42CD-8AB1-43EFEBB72F12}"
 	ProjectSection(SolutionItems) = preProject
-		.\.gitattributes = .\.gitattributes
-		.\.gitignore = .\.gitignore
-		.\build.cake = .\build.cake
-		.\build.cmd = .\build.cmd
-		.\build.ps1 = .\build.ps1
-		.\how-to-build.md = .\how-to-build.md
-		.\LICENSE = .\LICENSE
-		.\logo.png = .\logo.png
-		.\package.cmd = .\package.cmd
-		.\README.md = .\README.md
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		appveyor.yml = appveyor.yml
+		build.cake = build.cake
+		build.cmd = build.cmd
+		build.ps1 = build.ps1
+		how-to-build.md = how-to-build.md
+		LICENSE = LICENSE
+		logo.png = logo.png
+		package.cmd = package.cmd
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CouchDB.Client.Console", "sample\CouchDB.Client.Console\CouchDB.Client.Console.csproj", "{57845336-2931-42F1-BCF1-E50CAAA8A47D}"

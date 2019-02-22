@@ -11,9 +11,12 @@ namespace CouchDB.Client
         internal RestClientWrapper http;
         internal string connectionString;
         
-        public CouchClient(string connectionString)
+        public CouchClient(string connectionString = null)
         {
-            Ensure.That(connectionString).IsNotNullOrWhiteSpace();
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                connectionString = "127.0.0.1:5984";
+            }
 
             connectionString = connectionString.EndsWith("/", StringComparison.InvariantCultureIgnoreCase) ? connectionString : connectionString + "/";
             connectionString = connectionString.StartsWith("http", StringComparison.InvariantCultureIgnoreCase) ? connectionString : "http://" + connectionString;

@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-	<AssemblyVersion>1.0.0.3</AssemblyVersion>
-	<FileVersion>1.0.0.2</FileVersion>
 	<PackageIconUrl>https://raw.githubusercontent.com/jefersonsv/CouchDB.Client/master/logo.png</PackageIconUrl>
 	<PackageProjectUrl>https://github.com/jefersonsv/CouchDB.Client</PackageProjectUrl>
 	<PackageLicenseUrl>https://opensource.org/licenses/mit-license.php</PackageLicenseUrl>
@@ -15,7 +13,9 @@
 	<Copyright>CouchDB.Client</Copyright>
 	<RepositoryType>CouchDB.Client</RepositoryType>
 	<Version>1.0.5</Version>
-	<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+	<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<AssemblyVersion>1.0.0.0</AssemblyVersion>
+	<FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
