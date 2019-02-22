@@ -15,6 +15,7 @@ namespace CouchDB.Client
         {
             var request = new RestSharp.RestRequest(Helper.EncodeID(id), RestSharp.Method.DELETE);
             request.AddQueryParameter("rev", rev);
+
             if (batchMode)
                 request.AddQueryParameter("batch", "ok");
 

@@ -9,7 +9,7 @@ namespace CouchDB.Client
         /// http://docs.couchdb.org/en/2.2.0/api/server/common.html#all-dbs
         /// </summary>
         /// <returns></returns>
-        [Obsolete("This method will be obsolete. Use ListAllDbsAsync() instead.")]
+        [Obsolete("This method will be obsolete. Use ListAllDatabasesAsync() instead.")]
         public async Task<CouchResponse> GetAllDbsAsync()
         {
             var request = new RestSharp.RestRequest("_all_dbs");
