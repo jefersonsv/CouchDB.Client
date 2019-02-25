@@ -74,9 +74,10 @@ PM> Install-Package CouchDB.Client
 - DumpAsync
 - ForceDeleteAsync
 - ForceMergeAsync
-- ForceUpdateAsync 
-- GetAsync
+- ForceUpdateAsync
+- GetAsync (get a document)
   -  Show Revisions
+- ExistAsync (check if document exists)
 - GetInfoAsync
 - GetRevision
 - GetRevisionInfoAsync
