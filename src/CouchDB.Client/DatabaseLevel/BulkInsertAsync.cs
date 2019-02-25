@@ -15,8 +15,8 @@ namespace CouchDB.Client
         {
             var request = new RestSharp.RestRequest("_bulk_docs", RestSharp.Method.POST);
 
-            FindBuilder expression = new FindBuilder();
-            expression.Docs(documentsObjects);
+            DocsBuilder expression = new DocsBuilder();
+            expression.Add(documentsObjects);
 
             request.AddParameter("application/json", expression.ToString(), ParameterType.RequestBody);
             return await client.http.ExecuteAsync(request);

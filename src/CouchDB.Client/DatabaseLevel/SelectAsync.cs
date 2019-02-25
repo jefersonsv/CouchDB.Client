@@ -9,8 +9,8 @@ namespace CouchDB.Client
         {
             var request = new RestSharp.RestRequest("_all_docs", RestSharp.Method.POST);
 
-            FindBuilder expression = new FindBuilder();
-            expression.Keys(ids);
+            DocsBuilder expression = new DocsBuilder();
+            expression.Add(ids);
 
             request.AddParameter("application/json", expression.ToString(), RestSharp.ParameterType.RequestBody);
             return await client.http.ExecuteAsync(request);
@@ -47,6 +47,16 @@ namespace CouchDB.Client
             var request = new RestSharp.RestRequest("/_find", RestSharp.Method.POST);
             request.AddParameter("application/json", expression.ToString(), RestSharp.ParameterType.RequestBody);
             return await client.http.ExecuteAsync(request);
+        }
+
+        /// <summary>
+        /// http://docs.couchdb.org/en/2.0.0/api/database/find.html
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        public async Task<CouchResponse> FindAsync(FindBuilder expression)
+        {
+            return await this.SelectAsync(expression);
         }
     }
 }
