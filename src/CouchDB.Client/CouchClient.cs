@@ -8,11 +8,14 @@ namespace CouchDB.Client
 {
     public partial class CouchClient
     {
+        internal string originalConnectionString;
         internal RestClientWrapper http;
         internal string connectionString;
         
         public CouchClient(string connectionString = null)
         {
+            this.originalConnectionString = connectionString;
+            
             if (string.IsNullOrEmpty(connectionString))
             {
                 connectionString = "127.0.0.1:5984";
@@ -24,14 +27,11 @@ namespace CouchDB.Client
 
             if (!string.IsNullOrEmpty(uri.UserInfo))
             {
-                this.connectionString = connectionString.Replace(uri.UserInfo + "@", string.Empty);
-            }
-            else
-            {
-                this.connectionString = connectionString;
+                connectionString = connectionString.Replace(uri.UserInfo + "@", string.Empty);
             }
 
-            var client = new RestClient(this.connectionString);
+            this.connectionString = connectionString;
+            var client = new RestClient(connectionString);
             if (!string.IsNullOrEmpty(uri.UserInfo))
             {
                 client.Authenticator = new HttpBasicAuthenticator(

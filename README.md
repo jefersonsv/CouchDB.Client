@@ -3,11 +3,6 @@
 This client access the Apache CouchDB (relax) for platform .NET Standard 2.0
 Builded under the API 2.1.0 this driver works together with RestSharp Simple Http Client and Json.NET popular high-performance JSON framework for .NET.
 
-# Aditional feature futher more API
-
-* Force update (get the last revision and update document)
-* Force delete (get the last revision and delete document)
-
 # Getting started
 
 Connecto to localhost server
@@ -46,6 +41,12 @@ var five = await db.SelectAsync();
 // select all limit 5 documents
 var five = await db.SelectAsync(5);
 ```
+
+# Further features
+
+* Force update (get the last revision and update document)
+* Force delete (get the last revision and delete document)
+* Helper to retrieve connection string from appSettings.json or enviroment variables
 
 # Nuget
 
@@ -87,7 +88,11 @@ PM> Install-Package CouchDB.Client
   - BatchMode
 - InsertRevisionAsync
   - BatchMode
-- SelectAsync
+- SelectAsync (get all documents using _all_docs views)
+  - ByID (get all documents by list ID using _all_docs views)
+- FindAsync (get document using Fluent Mango)
+- DesignDocs (get all design documents using _design_docs views)
+  - ByID (get all design documents by list ID using _design_docs views)
 - UpdateAsync
 
 ## Fluent Mango

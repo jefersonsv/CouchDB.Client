@@ -12,8 +12,8 @@ namespace CouchDB.Client
 
         internal CouchDatabase(CouchClient client, string database)
         {
-            client.http.client.BaseUrl = new Uri(client.connectionString + database);
-            this.client = client;
+            this.client = new CouchClient(client.originalConnectionString);
+            this.client.http.client.BaseUrl = new Uri(client.connectionString + database); // add database name
             this.database = database;
         }
     }
