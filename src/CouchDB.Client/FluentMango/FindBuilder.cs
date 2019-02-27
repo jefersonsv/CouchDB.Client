@@ -42,9 +42,10 @@ namespace CouchDB.Client.FluentMango
         /// </summary>
         /// <param name="fields"></param>
         /// <returns></returns>
-        public FindBuilder Fields(params string[] fields)
+        public FindBuilder Fields(params string[] fieldArr)
         {
-            fields.ToList().ForEach(a => this.fields.Add(a));
+            fields = new JArray();
+            fieldArr.ToList().ForEach(a => this.fields.Add(a));
 
             return this;
         }

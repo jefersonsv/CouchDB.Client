@@ -13,8 +13,15 @@ namespace CouchDB.Client.FluentMango
 
         public Selector(string field, object value)
         {
-            this.Field = field;
-            this.Value = value;
+            if (value.GetType() == typeof(SelectorOperator) || value.GetType() == typeof(CombinationOperator))
+            {
+                throw new ArgumentNullException("You must specify a value when use a SelectorOperator or CombinationOperator");
+            }
+            else
+            {
+                this.Field = field;
+                this.Value = value;
+            }
         }
 
         public Selector(string field, SelectorOperator selectorOperator, object value)
@@ -187,14 +194,7 @@ namespace CouchDB.Client.FluentMango
 
         private JToken SelectorOperatorValue(SelectorOperator selectorOperator, object value)
         {
-            if (selectorOperator == SelectorOperator.Exists)
-            {
-                return JToken.FromObject(this.Value.ToString().ToLower());
-            }
-            else
-            {
-                return JToken.FromObject(this.Value);
-            }
+            return JToken.FromObject(this.Value);
         }
 
         private string SelectorOperatorString(SelectorOperator selectorOperator)
