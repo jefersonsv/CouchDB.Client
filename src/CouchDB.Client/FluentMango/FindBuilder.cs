@@ -10,8 +10,8 @@ namespace CouchDB.Client.FluentMango
 {
     /// <summary>
     /// The selector field is required
-    /// http://docs.couchdb.org/en/2.2.0/api/database/find.html
     /// </summary>
+    /// <see cref="http://docs.couchdb.org/en/2.2.0/api/database/find.html"/>
     public class FindBuilder
     {
         Collection<Selector> selectors;
@@ -99,6 +99,18 @@ namespace CouchDB.Client.FluentMango
         /// JSON array following sort syntax. Optional
         /// </summary>
         /// <returns></returns>
+        public FindBuilder Sort(string field)
+        {
+            this.sort = new JArray();
+            this.sort.Add(field);
+
+            return this;
+        }
+
+        /// <summary>
+        /// JSON array following sort syntax. Optional
+        /// </summary>
+        /// <returns></returns>
         public FindBuilder Sort(string[] fields)
         {
             this.sort = new JArray();
@@ -115,9 +127,12 @@ namespace CouchDB.Client.FluentMango
         {
             this.sort = new JArray();
             fieldsOrders.ToList().ForEach(a =>
-                this.sort.Add(
-                    new JObject(a.Field, a.Order.ToString().ToLower())
-                ));
+            {
+                var obj = new JObject();
+                obj.Add(a.Field, a.Order.ToString().ToLower());
+
+                this.sort.Add(obj);
+            });
 
             return this;
         }
