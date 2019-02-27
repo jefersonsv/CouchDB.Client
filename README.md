@@ -82,6 +82,7 @@ PM> Install-Package CouchDB.Client
 - GetInfoAsync
 - GetRevision
 - GetRevisionInfoAsync
+- CreateIndexAsync
 - InsertAsync
   - Generating ID
   - Specifying ID
